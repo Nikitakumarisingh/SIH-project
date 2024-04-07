@@ -1,0 +1,50 @@
+@import 'colors';
+
+body{
+  padding : 0;
+  margin : 0 ;
+  background-color : white;
+}
+
+.uploadImage{
+  display : flex;
+  flex-direction : column;
+  
+  div{
+    text-align:center;
+    padding:3%;
+    border:thin solid black;
+    width : 50%;
+    margin : 0 auto;
+
+    >h2{
+      font-family : "Roboto";
+    }
+  }
+
+  input[type="file"]{
+    display: none;
+  }
+
+  label{
+    cursor:pointer;
+  }
+
+
+  >button{
+    background-color : $titlecolor;
+    color : white;
+    padding : 1rem 2rem;
+    font-family : "Roboto";
+    border-radius : 10px;
+    font-weight : 500;
+    border : none;
+    margin : 2rem auto;
+    cursor : pointer;
+
+    &:hover{
+      color : $dark;
+    }
+  }
+  
+}

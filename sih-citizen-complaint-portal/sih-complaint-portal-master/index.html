@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camera Capture</title>
+  <style>
+    /* Basic styling for layout */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    #videoElement {
+      width: 80%; /* Responsive width for the video element */
+      max-width: 480px;
+      height: auto;
+    }
+
+    #captureButton,
+    #downloadButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #captureButton:hover,
+    #downloadButton:hover {
+      background-color: #0056b3;
+    }
+
+    canvas {
+      display: none; /* Hide the canvas element initially */
+    }
+  </style>
+</head>
+<body>
+  <h1>Camera Capture</h1>
+  <video id="videoElement" width="480" height="360" autoplay></video>
+  <button id="captureButton">Capture</button>
+  <canvas id="canvasElement" width="640" height="480" style="display: none;"></canvas>
+  <a id="downloadButton" download="captured_image.png">
+    <button>Download Image</button>
+  </a>
+
+  <script>
+    const video = document.getElementById('videoElement');
+    const canvas = document.getElementById('canvasElement');
+    const captureButton = document.getElementById('captureButton');
+    const downloadButton = document.getElementById('downloadButton');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+      })
+      .catch((error) => {
+        console.error('Error accessing the camera:', error);
+      });
+
+    captureButton.addEventListener('click', () => {
+        console.log("dfj");
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const imageURL = canvas.toDataURL('image/png');
+
+      // Example: Upload image to server using Fetch API
+      fetch('/upload', {
+        method: 'POST',
+        body: imageURL,
+        headers: {
+          'Content-Type': 'image/png'
+        }
+      })
+      .then(response => response.text())
+      .then(filePath => {
+        console.log('Image uploaded to:', filePath);
+        console.log(imageURL)
+        // You can display the path or perform other actions with the file path here
+      })
+      .catch(error => {
+        console.error('Error uploading image:', error);
+      });
+
+      downloadButton.href = imageURL;
+    });
+  </script>
+</body>
+</html>
